@@ -1,0 +1,7 @@
+@echo off
+set NODE_POSTGRESQL_SERVIDOR=http://ec2-44-209-158-64.compute-1.amazonaws.com
+set NODE_POSTGRESQL_USUARIO=qarspxywtpjsii
+set NODE_POSTGRESQL_DATABASE=d8620g50u3u1nd
+set NODE_POSTGRESQL_SENHA=b8834858b5448a642dbb2756980610d794f8f2c9d8d3d0011a35ee80810d0a82
+set NODE_POSTGRESQL_PORTA=5432
+@echo Variaveis de ambiente ajustadas com sucesso!

@@ -1,0 +1,37 @@
+{
+    "codigo": 1,
+    "nome": "A República (Platão)",
+    "preco": 77.77
+}
+
+{
+    "codigo": 2,
+    "nome": "O Príncipe (Nicolau Maquiavel)",
+    "preco": 55.55
+}
+
+{
+    "codigo": 3,
+    "nome": "A Condição Humana (Hannah Arendt)",
+    "preco": 33.33
+}
+
+{
+    "codigo": 4,
+    "nome": "Ser e tempo (Martin Heidegger)",
+    "preco": 66.66
+}
+
+{
+    "codigo": 5,
+    "nome": "Crítica da Razão Pura (Immanuel Kant)",
+    "preco": 22.22
+}
+
+{
+    "codigo": 6,
+    "nome": "A Política (Aristóteles)",
+    "preco": 44.44
+}
+
+

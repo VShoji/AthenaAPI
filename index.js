@@ -1,5 +1,6 @@
 const express  = require ('express');
-const bd       = require ('./bd.js');
+//const bd       = require ('./bd.js');
+const rotas    = require('./rotas.js');
 
 function middleWareGlobal (req, res, next)
 {
@@ -14,14 +15,14 @@ function middleWareGlobal (req, res, next)
 
 async function ativacaoDoServidor ()
 {
-    const ret = await bd.getConexao();
+    // Descomentar isso e o require se o bd for necessário
+    /*const ret = await bd.getConexao();
 
     if (ret===null)
     {
         console.log ('Não foi possível estabelecer conexão com o BD!');
         process.exit(1);
-    }
-
+    }*/
 
     const express = require('express');
     const app     = express();
@@ -29,7 +30,7 @@ async function ativacaoDoServidor ()
     app.use(express.json());   // faz com que o express consiga processar JSON
     app.use(middleWareGlobal); // app.use cria o middleware global
 
-
+    rotas(app);
 
     console.log ('Servidor ativo na porta 3000...');
     app.listen(3000);

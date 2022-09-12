@@ -1,7 +1,6 @@
 {
-  "name": "livraria",
+  "name": "athena",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,5 +18,14 @@
     "pgtools": "^0.3.2",
     "postgres": "^3.2.4",
     "postgresql": "0.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VShoji/AthenaAPI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/VShoji/AthenaAPI/issues"
+  },
+  "homepage": "https://github.com/VShoji/AthenaAPI#readme",
+  "description": ""
 }

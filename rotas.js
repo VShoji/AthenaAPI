@@ -1,7 +1,6 @@
 const Alunos     = require ('./alunos.js');
 const Aluno      = require ('./aluno.js');
 const Comunicado = require ('./comunicado.js');
-const Logradouro = require ('./logradouro.js');
 
 // para a rota de CREATE
 async function inclusao (req, res)

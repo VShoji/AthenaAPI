@@ -1,0 +1,23 @@
+{
+  "name": "livraria",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.17.1",
+    "mssql": "^8.1.2",
+    "mysql2": "^2.3.3",
+    "pg": "^8.7.3",
+    "pgtools": "^0.3.2",
+    "postgres": "^3.2.4",
+    "postgresql": "0.0.1"
+  }
+}

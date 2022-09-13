@@ -1,5 +1,5 @@
-const express  = require ('express');
 const bd       = require ('./bd.js');
+const rotas    = require('./rotas.js');
 
 function middleWareGlobal (req, res, next)
 {
@@ -22,14 +22,13 @@ async function ativacaoDoServidor ()
         process.exit(1);
     }
 
-
     const express = require('express');
     const app     = express();
     
     app.use(express.json());   // faz com que o express consiga processar JSON
     app.use(middleWareGlobal); // app.use cria o middleware global
 
-
+    rotas(app, ret);
 
     console.log ('Servidor ativo na porta 3000...');
     app.listen(3000);

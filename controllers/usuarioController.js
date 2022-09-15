@@ -1,13 +1,13 @@
 const bd = require ('./bd');
 
-async function inclua (aluno)
+async function cadastrar (usuario)
 {
     const conexao = await bd.getConexao ();
     if (conexao==null) return null;
 
     try
     {
-        const sql     = `INSERT INTO ALUNO (raaluno,nomealuno,cep,complemento,numeroResidencia) VALUES (${aluno.raaluno}, '${aluno.nomealuno}', ${aluno.cep}, '${aluno.complemento}', ${aluno.numeroResidencia})`;
+        const sql     = `INSERT INTO usuario (idusuario,nomeusuario,senhausuario,emailusuario) VALUES (default, '${usuario.nomeusuario}', ${usuario.senhausuario}, '${usuario.emailusuario}')`;
         await conexao.query (sql);
         return true;
     }
@@ -17,7 +17,7 @@ async function inclua (aluno)
     }
 }
 
-async function atualize (aluno)
+/*async function atualize (aluno)
 {
     const conexao = await bd.getConexao ();
     if (conexao==null) return null;
@@ -50,36 +50,16 @@ async function remova (raaluno)
         return false;
     }
 }
+*/
 
-async function getAlunoCep(raaluno){
-
-    const conexao = await bd.getConexao();
-    if (conexao==null) return null;
-
-    try
-    {
-        const  sql     = `SELECT cep FROM ALUNO WHERE raaluno=${raaluno}`;
-        const res = await conexao.query(sql);
-        const cep = res.rows[0].cep;
-
-        return cep;
-    }
-    catch (excecao)
-    {
-        return false;
-    }
-
-}
-
-
-async function recupereUm (raaluno)
+async function login (emailusuario)
 {
     const conexao = await bd.getConexao();
     if (conexao==null) return null;
 
     try
     {
-        const  sql     = `SELECT * FROM ALUNO WHERE raaluno=${raaluno}`;
+        const  sql     = `SELECT * FROM usuario WHERE emailusuario=${emailusuario}`;
         const res = await conexao.query(sql);  
         const linhas = res.rows[0];
 
@@ -91,27 +71,7 @@ async function recupereUm (raaluno)
     }
 }
 
-async function recupereTodos ()
-{
-    const conexao = await bd.getConexao();
-    if (conexao==null) return null;
-
-    try
-    {
-        const  sql     = 'SELECT * FROM ALUNO';
-        const res = await conexao.query(sql);
-        const linhas = res.rows;
-
-        return linhas;
-    }
-    catch (excecao)
-    {
-        
-        return false;
-    }
-}
-
-module.exports = {inclua, atualize, remova, recupereUm, recupereTodos, getAlunoCep}
+module.exports = {cadastrar, login}
 
 
 

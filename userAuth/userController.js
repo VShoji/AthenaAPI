@@ -1,28 +1,26 @@
 const { user } = require("pg/lib/defaults");
+const { cadastrar } = require("./usuarioController");
 
 // registrar novo usuario
-exports.register = async (req, res) => {
+async function cadastrar (req, res) {
+
+    console.log(req.body);
 
     //hash da senha
     const salt = await bcrypt.genSalt(10);
-    const hasPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
+    const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
 
     // criar um objeto usuario
     const user = new user({
         idUsuario : req.body.idUsuario,
         nomeUsuario : req.body.nomeUsuario,
         emailUsuario : req.body.emailUsuario,
-        senhaUsuario : hasPassword
-
+        senhaUsuario : hashPassword
     });
 
-    // cadastrar usuario no bd
-    try{
-        const id = await User.create(user);
-        user.idUsuario = idUsuario;
-        delete user.senhaUsuario;
-    }
-    catch(err){
-        res.status(500).send(err);
-    }
-};
+    
+
+
+}
+
+module.exports = {cadastrar}

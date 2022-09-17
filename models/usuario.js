@@ -64,9 +64,9 @@ class Usuario
 
 }
 
-function novo (senhaUsuario, nomeUsuario, emailUsuario)
+function novo (idUsuario, senhaUsuario, nomeUsuario, emailUsuario)
 {
-    return new Usuario (senhaUsuario, nomeUsuario, emailUsuario);
+    return new Usuario (idUsuario, senhaUsuario, nomeUsuario, emailUsuario);
 }
 
 module.exports = {novo}

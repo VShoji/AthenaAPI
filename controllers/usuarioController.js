@@ -1,77 +1,29 @@
-const bd = require ('./bd');
+const user = require('../models/usuario');
 
-async function cadastrar (usuario)
-{
-    const conexao = await bd.getConexao ();
-    if (conexao==null) return null;
+// cadastrar novo usuario
+async function cadastrar (req, res) {
 
-    try
-    {
-        const sql     = `INSERT INTO usuario (idusuario,nomeusuario,senhausuario,emailusuario) VALUES (default, '${usuario.nomeusuario}', ${usuario.senhausuario}, '${usuario.emailusuario}')`;
-        await conexao.query (sql);
-        return true;
+    //hash da senha
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
+
+    // criar um objeto usuario
+    user = new user({
+        idUsuario : req.body.idUsuario,
+        nomeUsuario : req.body.nomeUsuario,
+        emailUsuario : req.body.emailUsuario,
+        senhaUsuario : hashPassword
+    });
+
+    // cadastrar usuario no bd
+    try{
+        const id = await User.create(user);
+        user.idUsuario = idUsuario;
+        delete user.senhaUsuario;
     }
-    catch (excecao)
-    {
-        return false;
+    catch(err){
+        res.status(500).send(err);
     }
-}
+};
 
-/*async function atualize (aluno)
-{
-    const conexao = await bd.getConexao ();
-    if (conexao==null) return null;
-
-    try
-    {
-        const sql   = `UPDATE ALUNO SET nomealuno='${aluno.nomealuno}',cep=${aluno.cep},complemento='${aluno.complemento}',NUMERORESIDENCIA='${aluno.numeroResidencia}' WHERE raaluno=${aluno.raaluno}`;
-        await conexao.query (sql);
-        return true;
-    }
-    catch (excecao)
-    {
-        return false;
-    }
-}
-    
-async function remova (raaluno)
-{
-    const conexao = await bd.getConexao ();
-    if (conexao==null) return null;
-
-    try
-    {
-        const sql   = `DELETE FROM ALUNO WHERE raaluno=${raaluno}`;
-        await conexao.query (sql);
-        return true;
-    }
-    catch (excecao)
-    {
-        return false;
-    }
-}
-*/
-
-async function login (emailusuario)
-{
-    const conexao = await bd.getConexao();
-    if (conexao==null) return null;
-
-    try
-    {
-        const  sql     = `SELECT * FROM usuario WHERE emailusuario=${emailusuario}`;
-        const res = await conexao.query(sql);  
-        const linhas = res.rows[0];
-
-        return linhas;
-    }
-    catch (excecao)
-    {
-        return false;
-    }
-}
-
-module.exports = {cadastrar, login}
-
-
-
+module.exports = {cadastrar};

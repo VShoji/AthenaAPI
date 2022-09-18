@@ -1,5 +1,6 @@
 const express  = require ('express');
 const bd       = require ('./bd.js');
+const rotas    = require('./rotas')
 
 function middleWareGlobal (req, res, next)
 {
@@ -29,6 +30,11 @@ async function ativacaoDoServidor ()
     app.use(express.json());   // faz com que o express consiga processar JSON
     app.use(middleWareGlobal); // app.use cria o middleware global
 
+    app.get('/', (req, res) => {
+        res.send("Bem vindo a API de Áthena.");
+    });
+
+    app.post('/users/cadastro', rotas.cadastrar);
 
 
     console.log ('Servidor ativo na porta 3000...');

@@ -1,28 +1,26 @@
-const user = require('../models/usuario');
+const bd = require('../bd');
 
 // cadastrar novo usuario
-async function cadastrar (req, res) {
+async function cadastrar (user) {
 
-    //hash da senha
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
+    console.log(user);
 
-    // criar um objeto usuario
-    user = new user({
-        idUsuario : req.body.idUsuario,
-        nomeUsuario : req.body.nomeUsuario,
-        emailUsuario : req.body.emailUsuario,
-        senhaUsuario : hashPassword
-    });
+    const db = await bd.getConexao();
+    if(db == null)
+        return null;
+
 
     // cadastrar usuario no bd
     try{
-        const id = await User.create(user);
-        user.idUsuario = idUsuario;
-        delete user.senhaUsuario;
+        const sql = `INSERT INTO USUARIO(idUsuario, nomeUsuario, emailUsuario, senhaUsuario) VALUES (DEFAULT, '${user.nomeUsuario}', '${user.emailUsuario}', '${user.senhaUsuario}')`;
+
+        console.log(sql);
+        await db.query(sql);
+        return true;
+
     }
     catch(err){
-        res.status(500).send(err);
+        return false;
     }
 };
 

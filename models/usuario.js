@@ -1,16 +1,16 @@
 class Usuario
 {
     #idUsuario
-    #senhaUsuario
     #nomeUsuario
     #emailUsuario
-
-    constructor (idUsuario, senhaUsuario, nomeUsuario, emailUsuario)
+    #senhaUsuario
+    
+    constructor (idUsuario, nomeUsuario, emailUsuario, senhaUsuario)
     {
-        this.idUsuario = idUsuario;
-        this.senhaUsuario     = senhaUsuario;
+        this.idUsuario        = idUsuario;
         this.nomeUsuario      =nomeUsuario;
         this.emailUsuario     = emailUsuario;
+        this.senhaUsuario     = senhaUsuario;
     }
 
 
@@ -35,6 +35,13 @@ class Usuario
         return this.#emailUsuario
     }
 
+    set idUsuario (idUsuario)
+    {
+        if (idUsuario===undefined || typeof idUsuario !== 'string' || idUsuario==="")
+            throw ('idUsuario inválida');
+
+        this.#idUsuario = idUsuario;
+    }
 
     set senhaUsuario (senhaUsuario)
     {
@@ -64,9 +71,9 @@ class Usuario
 
 }
 
-function novo (idUsuario, senhaUsuario, nomeUsuario, emailUsuario)
+function novo (idUsuario, nomeUsuario, emailUsuario, senhaUsuario)
 {
-    return new Usuario (idUsuario, senhaUsuario, nomeUsuario, emailUsuario);
+    return new Usuario (idUsuario, nomeUsuario, emailUsuario, senhaUsuario);
 }
 
 module.exports = {novo}

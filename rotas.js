@@ -1,41 +1,42 @@
-
-
-const usuario = require ('./controllers/usuarioController');
+const bcrypt = require('bcrypt');
+const Usuario = require ('./models/usuario');
+const UsuarioController = require ('./controllers/usuarioController');
 const materia = '/materia'
-
-module.exports = (app, db) => {
-
-
-    app.get('/', (req, res) => {
-        res.send("Bem vindo a API de Áthena.");
-    });
-
 
     // Cadastro e login
     ////////////////////////////////////////
 
-    app.post('/cadastro', usuario.cadastrar);
+    async function cadastrar(req, res){
+        if(Object.values(req.body).length != 4 || !req.body.idUsuario || !req.body.nomeUsuario || !req.body.emailUsuario || !req.body.senhaUsuario)
+            return res.status(422).json();
 
-    
+            
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
+            
+            console.log(req.body);
+            console.log(hashPassword);
 
-
-    //////////////////////////////////////////////
-
-    app.get(materia, (req, res) => {
-        const sql = 'SELECT * FROM MATERIA';
-        db.query(sql, (err, qres) => {
-            if (err)
+            let user;
+            try
             {
-                res.status(400).send("Bad Request");
-                return;
+                user = Usuario.novo (req.body.idUsuario ,req.body.nomeUsuario,req.body.emailUsuario ,hashPassword);
             }
+            catch (excecao)
+            {
+                return res.status(422).send("Unprocessable Entity");
+            }    
 
-            if (qres.rowCount == 0) {
-                res.status(404).send("Not Found");
-                return;
-            }
+        const ret = await UsuarioController.cadastrar(user);
 
-            res.status(200).json(qres);
-        })
-    })
-}
+        if(ret==null){
+            return res.status(500).send("Internal Server Error");
+        }
+        if(ret==false){
+            return res.status(409).send("Conflict");
+        }
+
+        return res.status(201).send("Sucess");
+    }
+    
+module.exports = {cadastrar};

@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const Usuario = require ('./models/usuario');
 const UsuarioController = require ('./controllers/usuarioController');
 const materia = '/materia'
@@ -13,9 +15,6 @@ const materia = '/materia'
             
             const salt = await bcrypt.genSalt(10);
             const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
-            
-            console.log(req.body);
-            console.log(hashPassword);
 
             let user;
             try
@@ -39,4 +38,30 @@ const materia = '/materia'
         return res.status(201).send("Sucess");
     }
     
-module.exports = {cadastrar};
+    async function login(req, res){
+
+        
+        let user;
+        user = await UsuarioController.login(req.body.emailUsuario);
+
+        if(user==undefined){
+            return res.status(404).send("Not found");
+           }
+
+        try{
+            const match = await bcrypt.compare(req.body.senhaUsuario, user.senhausuario);
+            const accessToken = jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET)
+            if(match){
+                res.json({ accessToken: accessToken });
+
+            } else {
+                res.json({ message: "Invalid Credentials" });
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    
+    }
+
+module.exports = {cadastrar, login};

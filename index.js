@@ -35,6 +35,7 @@ async function ativacaoDoServidor ()
     });
 
     app.post('/users/cadastro', rotas.cadastrar);
+    app.post('/users/login',    rotas.login);
 
 
     console.log ('Servidor ativo na porta 3000...');

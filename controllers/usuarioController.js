@@ -3,8 +3,6 @@ const bd = require('../bd');
 // cadastrar novo usuario
 async function cadastrar (user) {
 
-    console.log(user);
-
     const db = await bd.getConexao();
     if(db == null)
         return null;
@@ -24,4 +22,22 @@ async function cadastrar (user) {
     }
 };
 
-module.exports = {cadastrar};
+async function login(emailUsuario){
+    const db = await bd.getConexao();
+    if(db == null)
+        return null;
+
+    try{
+        const sql = `SELECT * FROM usuario WHERE emailUsuario='${emailUsuario}'`;
+        console.log(sql);
+        const res = await db.query(sql);
+
+        const user = res.rows[0];
+        return user;
+    }
+    catch(e){
+        console.log(e);
+    }
+}
+
+module.exports = {cadastrar, login};

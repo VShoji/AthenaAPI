@@ -1,7 +1,7 @@
 const bd = require('../bd');
 
 // cadastrar novo usuario
-async function cadastrar (user) {
+async function inserirUsuario (user) {
 
     const db = await bd.getConexao();
     if(db == null)
@@ -22,7 +22,7 @@ async function cadastrar (user) {
     }
 };
 
-async function login(emailUsuario){
+async function getUserByEmail(emailUsuario){
     const db = await bd.getConexao();
     if(db == null)
         return null;
@@ -40,4 +40,4 @@ async function login(emailUsuario){
     }
 }
 
-module.exports = {cadastrar, login};
+module.exports = {inserirUsuario, getUserByEmail};

@@ -12,7 +12,6 @@ const materia = '/materia'
         if(Object.values(req.body).length != 4 || !req.body.idUsuario || !req.body.nomeUsuario || !req.body.emailUsuario || !req.body.senhaUsuario)
             return res.status(422).json();
 
-            
             const salt = await bcrypt.genSalt(10);
             const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
 
@@ -26,7 +25,7 @@ const materia = '/materia'
                 return res.status(422).send("Unprocessable Entity");
             }    
 
-        const ret = await UsuarioController.cadastrar(user);
+        const ret = await UsuarioController.inserirUsuario(user);
 
         if(ret==null){
             return res.status(500).send("Internal Server Error");
@@ -42,7 +41,7 @@ const materia = '/materia'
 
         
         let user;
-        user = await UsuarioController.login(req.body.emailUsuario);
+        user = await UsuarioController.getUserByEmail(req.body.emailUsuario);
 
         if(user==undefined){
             return res.status(404).send("Not found");

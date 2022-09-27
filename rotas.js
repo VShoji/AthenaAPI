@@ -3,7 +3,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const Usuario = require ('./models/usuario');
 const UsuarioController = require ('./controllers/usuarioController');
-const materia = '/materia'
+const materia = require('./models/materia')
 
     // Cadastro e login
     ////////////////////////////////////////

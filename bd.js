@@ -1,26 +1,23 @@
 require('dotenv').config()
 const {Client}    = require("pg");
 
-const client = new Client({
-    connectionString : process.env.HEROKU_DATABASE_URL,
-    ssl:{
-        rejectUnauthorized: false
-    }
-});
-
-client.connect();
-
 async function getConexao ()
 {
-    if (global.conexao && global.conexao.state !== 'disconnected')
-        return global.conexao;
+    const client = new Client({
+        user: process.env.USER,
+        host: process.env.HOST,
+        database: process.env.DATABASE,
+        password: process.env.PASSWORD,
+        port: process.env.port,
+        ssl:{
+            rejectUnauthorized: false
+        }
+    });
 
     try
     {
-        const conexao = client;
-        global.conexao = conexao;
-
-        return conexao;
+        client.connect();
+        return client;
     }
     catch (erro)
     {
@@ -28,7 +25,5 @@ async function getConexao ()
         return null;
     }
 }
-
-
 
 module.exports = {getConexao}

@@ -1,44 +1,26 @@
-const express  = require ('express');
-const bd       = require ('./bd.js');
-const rotas    = require('./rotas')
+const app = require('express')();
 
-function middleWareGlobal (req, res, next)
-{
-    console.time('Duração'); // marca o início da requisição
-    console.log('Iniciou  o processamento da requisição '+req.method+' em '+req.url); // indica o início do processamento da url, indicando também o método
+createDbConnection()
 
-    next(); // função que chama o processamento, propriamente dito, da requisição
-               
-    console.log('Terminou o processamento da requisição '+req.method+' em '+req.url); // indica o término do processamento da url, indicando também o método
-    console.timeEnd('Duração'); // informa duração do processamento da requisição
-}
+const port = 3000
 
-async function ativacaoDoServidor ()
-{
-    const ret = await bd.getConexao();
+// Logger middleware
+app.use(require('./middleware/log.js'))
 
-    if (ret===null)
-    {
-        console.log ('Não foi possível estabelecer conexão com o BD!');
-        process.exit(1);
+app.get('/', (req, res) => {
+    res.status(200).send("Success")
+})
+
+app.listen(port, () => {
+    console.log("Server listening to port: " + port);
+})
+
+async function createDbConnection() {
+    const db = require('./bd');
+    const con = await db.getConexao();
+
+    if (!con) {
+        console.log('Failed to establish database connection');
+        process.exit(-1);
     }
-
-
-    const express = require('express');
-    const app     = express();
-    
-    app.use(express.json());   // faz com que o express consiga processar JSON
-    app.use(middleWareGlobal); // app.use cria o middleware global
-
-    app.get('/', (req, res) => {
-        res.send("Bem vindo a API de Áthena.");
-    });
-
-    app.post('/users/cadastro', rotas.cadastrar);
-    app.post('/users/login',    rotas.login);
-
-
-    console.log ('Servidor ativo na porta 3000...');
-    app.listen(3000);
 }
-ativacaoDoServidor();

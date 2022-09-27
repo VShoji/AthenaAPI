@@ -21,6 +21,7 @@ async function getConexao ()
     }
     catch (erro)
     {
+        console.log("> Error while trying to connect: " + erro);
         return null;
     }
 }

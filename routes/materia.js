@@ -1,21 +1,27 @@
-const MateriaController = require('../controllers/materiaController');
-
-router = require('express').Router();
-materiaController = new MateriaController()
+const router = require('express').Router();
+const db = require('../bd')
 
 router.get('/', (req, res) => {
-    data = materiaController.getAll();
-    if (!data) {
-        res.status(400).send('Internal Server Error');
-        return;
-    }
+    const query = "SELECT * FROM MATERIA"
 
-    if (data.rows.length == 0) {
-        res.status(404).send('Not Found')
-        return;
-    }
+    db.query(query, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+    
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+    
+        res.status(200).send(data.rows);
+    })
+})
 
-    res.status(200).send(data.json());
+router.get('/:id', (req, res) => {
+    const id = req.params.id
+    const query = "SELECT * FROM MATERIA"
 })
 
 module.exports = router;

@@ -4,7 +4,7 @@ const Desempenho = require('../models/desempenho');
 
 router.get('/:idusuario/:idmateria', (req, res) => {
     
-    const ret = await controller.getAllNotas(req.body.idusuario, req.body.idmateria);
+    const ret =  controller.getAllNotas(req.params.idusuario, req.params.idmateria);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");
@@ -18,7 +18,7 @@ router.get('/:idusuario/:idmateria', (req, res) => {
 
 router.get('/:iddesempenho', (req, res) => {
     
-    const ret = await controller.getUmaNota(req.body.iddesempenho);
+    const ret =  controller.getUmaNota(req.body.iddesempenho);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");
@@ -40,7 +40,7 @@ router.post('/post', (req, res) => {
         return res.status(422).send("Unprocessable Entity");
     }
 
-    const ret = await controller.inserirDesempenho(desempenho);
+    const ret =  controller.inserirDesempenho(desempenho);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");
@@ -53,7 +53,7 @@ router.post('/post', (req, res) => {
 });
 
 router.put('/put', (req, res) => {
-    const ret = await controller.atualizarDesempenho(req.body.iddesempenho, req.body.nota);
+    const ret =  controller.atualizarDesempenho(req.body.iddesempenho, req.body.nota);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");
@@ -66,7 +66,7 @@ router.put('/put', (req, res) => {
 });
 
 router.delete('/delete', (req, res) => {
-    const ret = await controller.excluirDesempenho(req.body.iddesempenho);
+    const ret =  controller.excluirDesempenho(req.body.iddesempenho);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");

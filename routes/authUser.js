@@ -11,8 +11,8 @@ router.post('/cadastro', (req, res) => {
     if (Object.values(req.body).length != 4 || !req.body.idUsuario || !req.body.nomeUsuario || !req.body.emailUsuario || !req.body.senhaUsuario)
         return res.status(422).json();
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
+    const salt =          bcrypt.genSalt(10);
+    const hashPassword =  bcrypt.hash(req.body.senhaUsuario, salt);
 
     let user;
     try {
@@ -22,7 +22,7 @@ router.post('/cadastro', (req, res) => {
         return res.status(422).send("Unprocessable Entity");
     }
 
-    const ret = await UsuarioController.inserirUsuario(user);
+    const ret = UsuarioController.inserirUsuario(user);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");
@@ -39,14 +39,14 @@ router.post('/cadastro', (req, res) => {
 router.post('/login', (req, res) => {
 
     let user;
-    user = await UsuarioController.getUserByEmail(req.body.emailUsuario);
+    user =  UsuarioController.getUserByEmail(req.body.emailUsuario);
 
     if (user == undefined) {
         return res.status(404).send("Not found");
     }
 
     try {
-        const match = await bcrypt.compare(req.body.senhaUsuario, user.senhausuario);
+        const match =  bcrypt.compare(req.body.senhaUsuario, user.senhausuario);
         const accessToken = jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET);
         if (match) {
             res.json({ accessToken: accessToken });

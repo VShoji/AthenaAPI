@@ -1,7 +1,6 @@
-const bd = require('../bd');
+const db = require('../bd')
 
 async function getAllNotas(idusuario, idmateria){
-    const db = await bd.getConexao();
     if(db == null)
         return null;
 
@@ -18,7 +17,6 @@ async function getAllNotas(idusuario, idmateria){
 }
 
 async function getUmaNota(iddesempenho){
-    const db = await bd.getConexao();
     if(db == null)
         return null;
 
@@ -35,7 +33,6 @@ async function getUmaNota(iddesempenho){
 // cadastrar novo usuario
 async function inserirDesempenho (des) {
 
-    const db = await bd.getConexao();
     if(db == null)
         return null;
 
@@ -55,7 +52,7 @@ async function inserirDesempenho (des) {
 // cadastrar novo usuario
 async function atualizarDesempenho (iddesempenho, nota) {
 
-    const db = await bd.getConexao();
+    
     if(db == null)
         return null;
 
@@ -74,13 +71,12 @@ async function atualizarDesempenho (iddesempenho, nota) {
 
 async function excluirDesempenho(iddesempenho)
 {
-    const conexao = await bd.getConexao ();
-    if (conexao==null) return null;
+    if (db==null) return null;
 
     try
     {
         const sql   = `DELETE FROM DESEMPENHO WHERE iddesempenho=${iddesempenho}`;
-        await conexao.query (sql);
+        await db.query (sql);
         return true;
     }
     catch (excecao)

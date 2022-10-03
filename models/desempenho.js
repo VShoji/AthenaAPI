@@ -1,13 +1,13 @@
 class Desempenho
 {
-    #idDesemepnho
+    #iddesemepnho
     #nota
     #idUsuario
     #idMateria
 
     constructor (iddesempenho, nota, idUsuario, idMateria)
     {
-        this.idDesemepnho = iddesempenho;
+        this.iddesemepnho = iddesempenho;
         this.nota = nota;
         this.idUsuario = idUsuario;
         this.idMateria = idMateria;
@@ -15,9 +15,9 @@ class Desempenho
     }
 
 
-    get idDesemepnho ()
+    get iddesemepnho ()
     {
-        return this.#idDesemepnho
+        return this.#iddesemepnho
     }
 
     get nota ()

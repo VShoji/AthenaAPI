@@ -3,22 +3,34 @@ const controller = require('../controllers/desempenhoController');
 const Desempenho = require('../models/desempenho');
 const db = require('../bd');
 
+router.get('/', (req, res) => {
+    const query = 'SELECT * FROM DESEMPENHO';
+
+    db.query(query, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+
+        res.status(200).send(data.rows);
+    });
+})
+
 router.get('/getAll/:idusuario/:idmateria', (req, res) => {
-
-    if (db == null)
-        return null;
-
 
     const idusuario = req.params.idusuario;
     const idmateria = req.params.idmateria;
-    console.log(idusuario);
-    console.log(idmateria);
 
+    const query = 'SELECT nota FROM DESEMPENHO WHERE idusuario=$1 AND idmateria=$2';
 
-    const query = `SELECT nota FROM DESEMPENHO WHERE idusuario='${idusuario}'
-                   AND   idmateria='${idmateria}'`;
+    const values = [idusuario, idmateria];        
 
-    db.query(query, (err, data) => {
+    db.query(query, values, (err, data) => {
         if (err) {
             res.status(400).send('Bad Request');
             return;
@@ -35,19 +47,28 @@ router.get('/getAll/:idusuario/:idmateria', (req, res) => {
 
 router.get('/getUm/:iddesempenho', (req, res) => {
 
-    const ret = controller.getUmaNota(req.body.iddesempenho);
+    const iddesempenho = req.params.iddesempenho;
 
-    if (ret == null) {
-        return res.status(500).send("Internal Server Error");
-    }
-    if (ret == false) {
-        return res.status(409).send("Conflict");
-    }
+    const query = `SELECT nota FROM DESEMPENHO WHERE iddesempenho=${iddesempenho}`;
 
-    return ret;
+    db.query(query, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+
+        res.status(200).send(data.rows);
+    });
 });
 
 router.post('/post', (req, res) => {
+
+    console.log(req.body);
 
     let desempenho;
     try {
@@ -57,16 +78,22 @@ router.post('/post', (req, res) => {
         return res.status(422).send("Unprocessable Entity");
     }
 
-    const ret = controller.inserirDesempenho(desempenho);
 
-    if (ret == null) {
-        return res.status(500).send("Internal Server Error");
-    }
-    if (ret == false) {
-        return res.status(409).send("Conflict");
-    }
+    const query = `INSERT INTO DESEMPENHO(iddesempenho, nota, idusuario, idmateria) VALUES (DEFAULT, '${desempenho.nota}', '${desempenho.idusuario}', '${desempenho.idmateria}')`;
 
-    return ret;
+    db.query(query, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+
+        res.status(200).send(data.rows);
+    });
 });
 
 router.put('/put', (req, res) => {
@@ -83,16 +110,25 @@ router.put('/put', (req, res) => {
 });
 
 router.delete('/delete', (req, res) => {
-    const ret = controller.excluirDesempenho(req.body.iddesempenho);
 
-    if (ret == null) {
-        return res.status(500).send("Internal Server Error");
-    }
-    if (ret == false) {
-        return res.status(409).send("Conflict");
-    }
+    const iddesemepnho = req.params.iddesemepnho;
 
-    return ret;
+    const query = 'DELETE FROM DESEMPENHO WHERE iddesempenho=$1';
+    const values = [iddesemepnho];
+
+    db.query(query, values, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+
+        res.status(200);
+    });
 })
 
 module.exports = router;

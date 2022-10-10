@@ -11,8 +11,8 @@ router.post('/cadastro', (req, res) => {
     if (Object.values(req.body).length != 4 || !req.body.idUsuario || !req.body.nomeUsuario || !req.body.emailUsuario || !req.body.senhaUsuario)
         return res.status(422).json();
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(req.body.senhaUsuario, salt);
+    const salt =          bcrypt.genSalt(10);
+    const hashPassword =  bcrypt.hash(req.body.senhaUsuario, salt);
 
     let user;
     try {
@@ -47,8 +47,8 @@ router.post('/login', (req, res) => {
     }
 
     try {
-        const match = await bcrypt.compare(req.body.senhaUsuario, user.senhausuario);
-        const accessToken = jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET)
+        const match =  bcrypt.compare(req.body.senhaUsuario, user.senhausuario);
+        const accessToken = jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET);
         if (match) {
             res.json({ accessToken: accessToken });
 
@@ -62,4 +62,4 @@ router.post('/login', (req, res) => {
 
 })
 
-module.exports = { cadastrar, login };
+module.exports = router;

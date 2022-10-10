@@ -1,8 +1,6 @@
-const bd = require('../bd');
-
+const db = require('../bd')
 
 async function getAllNotas(idusuario, idmateria){
-    const db = await bd.getConexao();
     if(db == null)
         return null;
 
@@ -19,7 +17,6 @@ async function getAllNotas(idusuario, idmateria){
 }
 
 async function getUmaNota(iddesempenho){
-    const db = await bd.getConexao();
     if(db == null)
         return null;
 
@@ -34,16 +31,14 @@ async function getUmaNota(iddesempenho){
     }
 }
 // cadastrar novo usuario
-async function inserirNota (nota, idusuario, idmateria) {
-
-    const db = await bd.getConexao();
+async function inserirDesempenho (des) {
     if(db == null)
         return null;
 
 
     // cadastrar usuario no bd
     try{
-        const sql = `INSERT INTO DESEMPENHO(iddesempenho, nota, idusuario, idmateria) VALUES (DEFAULT, '${nota}', '${idusuario}', '${idmateria}')`;
+        const sql = `INSERT INTO DESEMPENHO(iddesempenho, nota, idusuario, idmateria) VALUES (DEFAULT, '${des.nota}', '${des.idusuario}', '${des.idmateria}')`;
         await db.query(sql);
         return true;
 
@@ -54,9 +49,7 @@ async function inserirNota (nota, idusuario, idmateria) {
 };
 
 // cadastrar novo usuario
-async function atualizarNota (iddesempenho, nota) {
-
-    const db = await bd.getConexao();
+async function atualizarDesempenho (iddesempenho, nota) {
     if(db == null)
         return null;
 
@@ -73,15 +66,14 @@ async function atualizarNota (iddesempenho, nota) {
     }
 };
 
-async function excluirNota (iddesempenho)
+async function excluirDesempenho(iddesempenho)
 {
-    const conexao = await bd.getConexao ();
-    if (conexao==null) return null;
+    if (db==null) return null;
 
     try
     {
         const sql   = `DELETE FROM DESEMPENHO WHERE iddesempenho=${iddesempenho}`;
-        await conexao.query (sql);
+        await db.query (sql);
         return true;
     }
     catch (excecao)
@@ -90,4 +82,4 @@ async function excluirNota (iddesempenho)
     }
 }
 
-module.exports = {getAllNotas, getUmaNota, inserirNota, atualizarNota, excluirNota};
+module.exports = {getAllNotas, getUmaNota, inserirDesempenho, atualizarDesempenho, excluirDesempenho};

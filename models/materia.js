@@ -21,6 +21,14 @@ class Materia
     }
 
 
+    set idMateria (idMateria)
+    {
+        if (idMateria===undefined || typeof idMateria !== 'string' || idMateria==="")
+            throw ('idMateria inválida');
+
+        this.#idMateria = idMateria;
+    }
+
     set nome (nome)
     {
         if (nome===undefined || typeof nome !== 'string' || nome==="")

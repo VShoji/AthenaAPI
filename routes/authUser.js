@@ -1,44 +1,40 @@
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const Usuario = require('../models/usuario');
+const db = require('../bd.js');
 const UsuarioController = require('../controllers/usuarioController');
 const router = require('express').Router();
 
 // Cadastro
 
 router.post('/cadastro', (req, res) => {
-    if (Object.values(req.body).length != 4 || !req.body.idUsuario || !req.body.nomeUsuario || !req.body.emailUsuario || !req.body.senhaUsuario)
-        return res.status(422).json();
+    bcrypt.hash(req.body.senhaUsuario, 10, (err, hashPassword) => {
+        if (err) {
+            console.log("> " + err)
+            res.status(500).send('Internal Server Error');
+            return;
+        }
 
-    const salt =          bcrypt.genSalt(10);
-    const hashPassword =  bcrypt.hash(req.body.senhaUsuario, salt);
-
-    let user;
-    try {
-        user = Usuario.novo(req.body.idUsuario, req.body.nomeUsuario, req.body.emailUsuario, hashPassword);
-    }
-    catch (excecao) {
-        return res.status(422).send("Unprocessable Entity");
-    }
-
-    const ret = await UsuarioController.inserirUsuario(user);
-
-    if (ret == null) {
-        return res.status(500).send("Internal Server Error");
-    }
-    if (ret == false) {
-        return res.status(409).send("Conflict");
-    }
-
-    return res.status(201).send("Sucess");
+        const query = "INSERT INTO USUARIO(idUsuario, nomeUsuario, emailUsuario, senhaUsuario) VALUES (DEFAULT, '$1', '$2', '$3')";
+        const values = [req.body.nomeUsuario, req.body.emailUsuario, hashPassword];
+    
+        db.query(query, values, (err, data) => {
+            if (err) {
+                console.log("> " + err)
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+    
+            res.status(200).send(data);
+        })
+    });
 })
 
 // login
 
 router.post('/login', (req, res) => {
 
-
+/*
     let user;
     user = await UsuarioController.getUserByEmail(req.body.emailUsuario);
 
@@ -59,7 +55,7 @@ router.post('/login', (req, res) => {
     catch (e) {
         console.log(e);
     }
-
+*/
 })
 
 module.exports = router;

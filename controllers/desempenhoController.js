@@ -32,7 +32,6 @@ async function getUmaNota(iddesempenho){
 }
 // cadastrar novo usuario
 async function inserirDesempenho (des) {
-
     if(db == null)
         return null;
 
@@ -51,8 +50,6 @@ async function inserirDesempenho (des) {
 
 // cadastrar novo usuario
 async function atualizarDesempenho (iddesempenho, nota) {
-
-    
     if(db == null)
         return null;
 

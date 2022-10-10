@@ -22,7 +22,7 @@ router.post('/cadastro', (req, res) => {
         return res.status(422).send("Unprocessable Entity");
     }
 
-    const ret = UsuarioController.inserirUsuario(user);
+    const ret = await UsuarioController.inserirUsuario(user);
 
     if (ret == null) {
         return res.status(500).send("Internal Server Error");
@@ -38,8 +38,9 @@ router.post('/cadastro', (req, res) => {
 
 router.post('/login', (req, res) => {
 
+
     let user;
-    user =  UsuarioController.getUserByEmail(req.body.emailUsuario);
+    user = await UsuarioController.getUserByEmail(req.body.emailUsuario);
 
     if (user == undefined) {
         return res.status(404).send("Not found");

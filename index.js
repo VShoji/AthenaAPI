@@ -1,4 +1,6 @@
 const app = require('express')();
+require('dotenv').config()
+
 const port = 3000;
 
 // Logger middleware

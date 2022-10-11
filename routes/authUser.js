@@ -48,7 +48,7 @@ router.post('/login', (req, res) => {
             return;
         }
 
-        bcrypt.compare(req.body.senhaUsuario, data.rows[0].senhaUsuario, (err, same) => {
+        bcrypt.compare(req.body.senhaUsuario, data.rows[0].senhausuario, (err, same) => {
             if (err) {
                 console.log("> " + err)
                 res.status(500).send('Internal Server Error');
@@ -57,10 +57,18 @@ router.post('/login', (req, res) => {
 
             if (!same) {
                 res.status(403).send("Access denied");
+                return;
             }
 
-            const tok = jwt.sign(JSON.stringify(data[0], process.env.TOKEN_SECRET));
-            res.status(200).send(tok);
+            const tok = jwt.sign(JSON.stringify(data.rows[0]), process.env.TOKEN_SECRET);
+            res.status(200).send({
+                token: tok,
+                user: {
+                    id: data.rows[0].idusuario,
+                    username: data.rows[0].nomeusuario,
+                    email: data.rows[0].emailusuario
+                }
+            });
         })
     })
 })

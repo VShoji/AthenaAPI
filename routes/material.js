@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
 
 // Obtém todo o material de um assunto
 router.get('/conteudo/:id', (req, res) => {
-    const query = 'SELECT * FROM ConteudoMaterial WHERE idConteudo=$1';
+    const query = 'SELECT m.* FROM Material m INNER JOIN ConteudoMaterial cm ON m.idMaterial = cm.idMaterial WHERE cm.idConteudo=$1 ';
     const values = [req.params.id];
 
     db.query(query, values, (err, data) => {

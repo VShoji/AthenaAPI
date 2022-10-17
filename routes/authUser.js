@@ -15,7 +15,7 @@ router.post('/cadastro', (req, res) => {
             return;
         }
 
-        const query = "INSERT INTO USUARIO(idUsuario, nomeUsuario, emailUsuario, senhaUsuario) VALUES (DEFAULT, $1, $2, $3)";
+        const query = "INSERT INTO USUARIO(idUsuario, nomeUsuario, emailUsuario, senhaUsuario) VALUES (DEFAULT, $1, $2, $3) RETURNING *";
         const values = [req.body.nomeUsuario, req.body.emailUsuario, hash];
     
         db.query(query, values, (err, data) => {
@@ -24,7 +24,20 @@ router.post('/cadastro', (req, res) => {
                 res.status(500).send('Internal Server Error');
                 return;
             }
-    
+            
+            const user = {
+                id: data.rows[0].idusuario,
+                username: data.rows[0].nomeusuario,
+                email: data.rows[0].emailusuario
+            }
+
+            const tok = jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET);
+            
+            res.status(200).send({
+                token: tok,
+                user: user
+            });
+
             res.status(200).send(data);
         })
     });
@@ -60,14 +73,17 @@ router.post('/login', (req, res) => {
                 return;
             }
 
-            const tok = jwt.sign(JSON.stringify(data.rows[0]), process.env.TOKEN_SECRET);
+            const user = {
+                id: data.rows[0].idusuario,
+                username: data.rows[0].nomeusuario,
+                email: data.rows[0].emailusuario
+            }
+
+            const tok = jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET);
+
             res.status(200).send({
                 token: tok,
-                user: {
-                    id: data.rows[0].idusuario,
-                    username: data.rows[0].nomeusuario,
-                    email: data.rows[0].emailusuario
-                }
+                user: user
             });
         })
     })

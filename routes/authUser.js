@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const db = require('../bd.js');
-const UsuarioController = require('../controllers/usuarioController');
 const router = require('express').Router();
 
 // Cadastro

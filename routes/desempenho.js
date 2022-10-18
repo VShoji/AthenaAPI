@@ -83,7 +83,6 @@ router.post('/post', (req, res) => {
         desempenho = Desempenho.novo(req.body.iddesempenho, req.body.nota, req.body.idusuario, req.body.idmateria, dateNow);
     }
     catch (excecao) {
-        console.log(excecao);
         return res.status(422).send("Unprocessable Entity");
     }
 

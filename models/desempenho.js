@@ -1,69 +1,78 @@
-class Desempenho
-{
-    #iddesemepnho
+class Desempenho {
+    #iddesempenho
     #nota
-    #idUsuario
-    #idMateria
+    #idusuario
+    #idmateria
+    #data
 
-    constructor (iddesempenho, nota, idUsuario, idMateria)
-    {
-        this.iddesemepnho = iddesempenho;
+    constructor(iddesempenho, nota, idusuario, idmateria, data) {
+        this.iddesempenho = iddesempenho;
         this.nota = nota;
-        this.idUsuario = idUsuario;
-        this.idMateria = idMateria;
-
+        this.idusuario = idusuario;
+        this.idmateria = idmateria;
+        this.data = data;
     }
 
 
-    get iddesemepnho ()
-    {
-        return this.#iddesemepnho
+    get iddesempenho() {
+        return this.#iddesempenho
     }
 
-    get nota ()
-    {
+    get nota() {
         return this.#nota
     }
 
-    get idUsuario ()
-    {
-        return this.#idUsuario
+    get idusuario() {
+        return this.#idusuario
     }
 
-    get idMateria ()
-    {
-        return this.#idMateria
+    get idmateria() {
+        return this.#idmateria
     }
 
-    set nota (nota)
-    {
-        if (nota===undefined || typeof nota !== 'number' || isNaN(nota) || nota<0)
+    get data() {
+        return this.#data
+    }
+
+    set iddesempenho(iddesempenho) {
+        if (iddesempenho === undefined || typeof iddesempenho !== 'number' || isNaN(iddesempenho) || iddesempenho < 0)
+            throw ('iddesempenho inválida');
+
+        this.#iddesempenho = iddesempenho;
+    }
+
+    set nota(nota) {
+        if (nota === undefined || typeof nota !== 'number' || isNaN(nota) || nota < 0)
             throw ('Nota inválida');
 
         this.#nota = nota;
     }
 
-    set idUsuario (idUsuario)
-    {
-        if (idUsuario===undefined || typeof idUsuario !== 'string' || idUsuario==="")
-            throw ('idUsuario inválida');
+    set idusuario(idusuario) {
+        if (idusuario === undefined || typeof idusuario !== 'number' || isNaN(idusuario) || idusuario < 0)
+            throw ('idusuario inválida');
 
-        this.#idUsuario = idUsuario;
+        this.#idusuario = idusuario;
     }
 
-    set idMateria (idMateria)
-    {
-        if (idMateria===undefined || typeof idMateria !== 'string' || idMateria==="")
-            throw ('idMateria inválida');
+    set idmateria(idmateria) {
+        if (idmateria === undefined || typeof idmateria !== 'number' || isNaN(idmateria) || idmateria < 0)
+            throw ('idmateria inválida');
 
-        this.#idMateria = idMateria;
+        this.#idmateria = idmateria;
+    }
+
+    set data(data) {
+        if (data===undefined || typeof data !== 'string' || data==="")
+            throw ('Data inválida.');
+
+        this.#data = data;
     }
 
 }
 
-function novo (nota)
-{
-    return new Materia (nota);
+function novo(iddesempenho, nota, idusuario, idmateria, data) {
+    return new Desempenho(iddesempenho, nota, idusuario, idmateria, data);
 }
 
-module.exports = {novo}
+module.exports = { novo }

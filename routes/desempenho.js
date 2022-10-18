@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const controller = require('../controllers/desempenhoController');
 const Desempenho = require('../models/desempenho');
 const db = require('../bd');
 
@@ -28,7 +27,7 @@ router.get('/getAll/:idusuario/:idmateria', (req, res) => {
 
     const query = 'SELECT nota FROM DESEMPENHO WHERE idusuario=$1 AND idmateria=$2';
 
-    const values = [idusuario, idmateria];        
+    const values = [idusuario, idmateria];
 
     db.query(query, values, (err, data) => {
         if (err) {
@@ -49,9 +48,10 @@ router.get('/getUm/:iddesempenho', (req, res) => {
 
     const iddesempenho = req.params.iddesempenho;
 
-    const query = `SELECT nota FROM DESEMPENHO WHERE iddesempenho=${iddesempenho}`;
+    const query = 'SELECT nota FROM DESEMPENHO WHERE iddesempenho=$1';
+    const values = [iddesempenho]
 
-    db.query(query, (err, data) => {
+    db.query(query, values, (err, data) => {
         if (err) {
             res.status(400).send('Bad Request');
             return;
@@ -68,53 +68,33 @@ router.get('/getUm/:iddesempenho', (req, res) => {
 
 router.post('/post', (req, res) => {
 
-    console.log(req.body);
+    let ts = Date.now();
+    let date_ob = new Date(ts);
+
+    let date = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let year = date_ob.getFullYear();
+
+    let dateNow = year + "-" + month + "-" + date;
+
 
     let desempenho;
     try {
-        desempenho = Desempenho.novo(req.body.iddesempenho, req.body.nota, req.body.idusuario, idmateria);
+        desempenho = Desempenho.novo(req.body.iddesempenho, req.body.nota, req.body.idusuario, req.body.idmateria, dateNow);
     }
     catch (excecao) {
+        console.log(excecao);
         return res.status(422).send("Unprocessable Entity");
     }
 
+    const nota = desempenho.nota;
+    const idusuario = desempenho.idusuario;
+    const idmateria = desempenho.idmateria;
+    const data      = desempenho.data;
 
-    const query = `INSERT INTO DESEMPENHO(iddesempenho, nota, idusuario, idmateria) VALUES (DEFAULT, '${desempenho.nota}', '${desempenho.idusuario}', '${desempenho.idmateria}')`;
 
-    db.query(query, (err, data) => {
-        if (err) {
-            res.status(400).send('Bad Request');
-            return;
-        }
-
-        if (data.rows.length == 0) {
-            res.status(404).send('Not Found')
-            return;
-        }
-
-        res.status(200).send(data.rows);
-    });
-});
-
-router.put('/put', (req, res) => {
-    const ret = controller.atualizarDesempenho(req.body.iddesempenho, req.body.nota);
-
-    if (ret == null) {
-        return res.status(500).send("Internal Server Error");
-    }
-    if (ret == false) {
-        return res.status(409).send("Conflict");
-    }
-
-    return ret;
-});
-
-router.delete('/delete', (req, res) => {
-
-    const iddesemepnho = req.params.iddesemepnho;
-
-    const query = 'DELETE FROM DESEMPENHO WHERE iddesempenho=$1';
-    const values = [iddesemepnho];
+    const query = 'INSERT INTO DESEMPENHO(iddesempenho, nota, idusuario, idmateria, data) VALUES (DEFAULT, $1, $2, $3, $4)';
+    const values = [nota, idusuario, idmateria, data];
 
     db.query(query, values, (err, data) => {
         if (err) {
@@ -122,14 +102,44 @@ router.delete('/delete', (req, res) => {
             return;
         }
 
-        if (data.rows.length == 0) {
-            res.status(404).send('Not Found')
+        res.status(200).send("Desempenho cadastrado com sucesso.");
+    });
+});
+
+router.put('/put', (req, res) => {
+
+    const iddesempenho = req.body.iddesempenho;
+    const nota = req.body.nota;
+
+    const query = 'UPDATE DESEMPENHO SET nota=$2 where iddesempenho=$1';
+    const values = [iddesempenho, nota];
+
+    db.query(query, values, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
             return;
         }
 
-        res.status(200);
+        res.status(200).send("Desempenho alterado com sucesso.");
+    });
+});
+
+router.delete('/delete/:iddesempenho', (req, res) => {
+
+    const iddesempenho = req.params.iddesempenho;
+
+    const query = 'DELETE FROM DESEMPENHO WHERE iddesempenho=$1';
+    const values = [iddesempenho];
+
+    db.query(query, values, (err, data) => {
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+
+        res.status(200).send("Desempenho excluido com sucesso.");
     });
 })
 
 module.exports = router;
-

@@ -1,33 +1,18 @@
-require('dotenv').config()
-const {Client}    = require("pg");
-
+const {Client} = require("pg");
 const client = new Client({
-    connectionString : process.env.HEROKU_DATABASE_URL,
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.port,
     ssl:{
         rejectUnauthorized: false
     }
 });
 
-client.connect();
+client.connect(err => {
+    if (err)
+        console.log('> ' + err)
+});
 
-async function getConexao ()
-{
-    if (global.conexao && global.conexao.state !== 'disconnected')
-        return global.conexao;
-
-    try
-    {
-        const conexao = client;
-        global.conexao = conexao;
-
-        return conexao;
-    }
-    catch (erro)
-    {
-        return null;
-    }
-}
-
-
-
-module.exports = {getConexao}
+module.exports = client;

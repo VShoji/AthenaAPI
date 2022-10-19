@@ -1,9 +1,8 @@
-const bd = require('../bd');
+const db = require('../bd');
 
 // cadastrar novo usuario
 async function inserirUsuario (user) {
 
-    const db = await bd.getConexao();
     if(db == null)
         return null;
 
@@ -21,7 +20,7 @@ async function inserirUsuario (user) {
 };
 
 async function getUserByEmail(emailUsuario){
-    const db = await bd.getConexao();
+
     if(db == null)
         return null;
 

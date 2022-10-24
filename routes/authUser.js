@@ -26,6 +26,7 @@ router.post('/cadastro', (req, res) => {
             }
             
             const user = {
+                id: data.rows[0].idusuario,
                 username: data.rows[0].nomeusuario,
                 email: data.rows[0].emailusuario
             }
@@ -71,6 +72,7 @@ router.post('/login', (req, res) => {
             }
 
             const user = {
+                id: data.rows[0].idusuario,
                 username: data.rows[0].nomeusuario,
                 email: data.rows[0].emailusuario
             }
@@ -85,11 +87,8 @@ router.post('/login', (req, res) => {
     })
 })
 
-router.post('/authorized', (req, res, user) => {
-    console.log(user);
-    res.status(200).send(user);
+router.post('/authorized', requireAuth, (req, res) => {
+    res.status(200).send(res.locals.cookie);
 })
-
-router.use('/authorized', requireAuth);
 
 module.exports = router;

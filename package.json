@@ -28,5 +28,7 @@
     "url": "https://github.com/VShoji/AthenaAPI/issues"
   },
   "homepage": "https://github.com/VShoji/AthenaAPI#readme",
+  "devDependencies": {},
+  "keywords": [],
   "description": ""
 }

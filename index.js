@@ -15,6 +15,7 @@ app.use('/materia', require('./routes/materia.js'));
 app.use('/user', require('./routes/authUser.js'));
 app.use('/desempenho', require('./routes/desempenho.js'));
 app.use('/exercicio', require('./routes/exercicio.js'));
+app.use('/usuariomateria', require('./routes/usuarioMateria.js'));
 
 
 app.listen(port, () => {

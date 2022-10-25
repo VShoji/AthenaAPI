@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-    const query = "SELECT * FROM CONTEUDO WHERE idMateria=$1";
+    const query = "SELECT * FROM MATERIA WHERE idMateria=$1";
     const values = [id];
 
     db.query(query, values, (err, data) => {

@@ -3,6 +3,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const db = require('../bd.js');
 const router = require('express').Router();
+const requireAuth = require('../middleware/requireAuth');
 
 // Cadastro
 
@@ -36,8 +37,6 @@ router.post('/cadastro', (req, res) => {
                 token: tok,
                 user: user
             });
-
-            res.status(200).send(data);
         })
     });
 })
@@ -86,6 +85,10 @@ router.post('/login', (req, res) => {
             });
         })
     })
+})
+
+router.post('/authorized', requireAuth, (req, res) => {
+    res.status(200).send(res.locals.cookie);
 })
 
 module.exports = router;

@@ -1,43 +1,11 @@
-const router = require('express').Router();
-const db = require('../bd');
+const router = require('express').Router()
+const db = require('../bd.js');
 
-router.get('/', (req, res) => {
-    const query = "SELECT * FROM EXERCICIO"
+router.get('/conteudo/:id', (req, res) => {
+    const query = 'SELECT e.idexercicio as idexercicio, e.tituloexercicio FROM EXERCICIO e, CONTEUDOEXERCICIO ce WHERE e.idexercicio = ce.idexercicio AND ce.idconteudo = $1'
+    const values = [req.params.id]
 
-    db.query(query, (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(400).send('Bad Request');
-            return;
-        }
-    
-        if (data.rows.length == 0) {
-            res.status(404).send('Not Found')
-            return;
-        }
-    
-        res.status(200).send(data.rows);
+    db.query(query, values, (err, data) => {
+        res.send(data.rows);
     })
 })
-
-router.get('/:idmateria', (req, res) => {
-    const idmateria = req.params.idmateria;
-    const query = `SELECT * FROM EXERCICIO where idmateria = ${idmateria}`
-
-    db.query(query, (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(400).send('Bad Request');
-            return;
-        }
-    
-        if (data.rows.length == 0) {
-            res.status(404).send('Not Found')
-            return;
-        }
-    
-        res.status(200).send(data.rows);
-    })
-})
-
-module.exports = router;

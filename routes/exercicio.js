@@ -6,6 +6,44 @@ router.get('/conteudo/:id', (req, res) => {
     const values = [req.params.id]
 
     db.query(query, values, (err, data) => {
-        res.send(data.rows);
+        if (err) {
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (data.rowCount < 1) {
+            res.status(404).send('Not Found');
+            return;
+        }
+
+        res.status(200).send(data.rows);
+    })
+})
+
+// TODO: TEST THIS
+router.get('/:id', (req, res) => {
+    const query = 'SELECT pathexercicio FROM EXERCICIO WHERE idexercicio = $1'
+    const values = [req.params.id]
+
+    db.query(query, values, (err, data) => {
+        if (err) {
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (data.rowCount < 1) {
+            res.status(404).send('Not Found');
+            return;
+        }
+
+        fetch(data.rows[0])
+        .then(ret => {
+            if (!ret) {
+                res.status(404).send('Not Found');
+                return;
+            }
+
+            res.status(200).send(ret);
+        })
     })
 })

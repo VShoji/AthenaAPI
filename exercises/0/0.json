@@ -1,0 +1,14 @@
+{
+    "title": "Exercício de Trigonometria",
+
+    "elements": [
+        {
+            "type": "image",
+            "url": "./exercises/0/assets/equation.jpg"
+        },
+        {
+            "type": "text",
+            "text": "Calcule X"
+        }
+    ]
+}

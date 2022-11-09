@@ -1,3 +1,4 @@
+const fs = require('fs')
 const router = require('express').Router()
 const db = require('../bd.js');
 
@@ -36,14 +37,15 @@ router.get('/:id', (req, res) => {
             return;
         }
 
-        fetch(data.rows[0])
-        .then(ret => {
-            if (!ret) {
+        fs.readFile(data.rows[0].pathexercicio, (err, file) => {
+            if (err || !file) {
                 res.status(404).send('Not Found');
                 return;
             }
 
-            res.status(200).send(ret);
-        })
+            res.status(200).send(file);
+        });
     })
 })
+
+module.exports = router;

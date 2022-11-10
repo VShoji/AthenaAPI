@@ -47,7 +47,7 @@ router.get('/:idusuario', (req, res) => {
     })
 })
 
-router.post('/post', (req, res) => {
+router.post('/cadastrarmateria', (req, res) => {
 
     const idusuario = req.body.idusuario;
     const idmateria = req.body.idmateria;
@@ -63,5 +63,29 @@ router.post('/post', (req, res) => {
         res.status(200).send("Materia cadastrada com sucesso.");
     });
 });
+
+router.delete('/:idusuariomateria', (req, res) => {
+
+    const idusuariomateria = req.params.idusuariomateria;
+
+    const query = "DELETE FROM USUARIOMATERIA WHERE IDUSUARIOMATERIA=$1"
+
+    const values=[idusuariomateria];
+
+    db.query(query, values, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.status(400).send('Bad Request');
+            return;
+        }
+    
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+    
+        res.status(200).send(data.rows);
+    })
+})
 
 module.exports = router;

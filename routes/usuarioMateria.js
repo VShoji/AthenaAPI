@@ -60,8 +60,9 @@ router.post('/cadastrarmateria', (req, res) => {
             res.status(400).send('Bad Request');
             return;
         }
-        res.status(200).send("Materia cadastrada com sucesso.");
-    });
+        res.status(200).json({message: "Matéria cadastrada com sucesso", status: 200});
+    })
+
 });
 
 router.delete('/descadastrar/:idmateria/:idusuario', (req, res) => {

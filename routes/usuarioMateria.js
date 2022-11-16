@@ -64,14 +64,27 @@ router.post('/cadastrarmateria', (req, res) => {
     });
 });
 
-router.delete('/:idusuariomateria', (req, res) => {
+router.delete('/descadastrar/:idmateria/:idusuario', (req, res) => {
 
-    const idusuariomateria = req.params.idusuariomateria;
+    const idmateria = req.params.idmateria;
+    const idusuario = req.params.idusuario;
 
-    const query = "DELETE FROM USUARIOMATERIA WHERE IDUSUARIOMATERIA=$1"
 
-    const values=[idusuariomateria];
+    const query = "DELETE FROM USUARIOMATERIA WHERE IDMATERIA=$1 AND IDUSUARIO = $2"
+    const query2 = "DELETE FROM DESEMPENHO WHERE IDMATERIA=$1 AND IDUSUARIO = $2";
 
+    const values=[idmateria, idusuario];
+
+    db.query(query2, values, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+        res.status(200);
+    })
+    
     db.query(query, values, (err, data) => {
         if (err) {
             console.log(err);
@@ -84,8 +97,10 @@ router.delete('/:idusuariomateria', (req, res) => {
             return;
         }
     
-        res.status(200).send(data.rows);
+        res.status(200);
     })
+
+
 })
 
 module.exports = router;

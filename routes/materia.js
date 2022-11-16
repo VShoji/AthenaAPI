@@ -62,6 +62,25 @@ router.get('/getMateriasNaoCadastradas/:idusuario', (req, res) => {
     })
 })
 
+router.get('/getMateriasCadastradas/:idusuario', (req, res) => {
+    const idusuario = req.params.idusuario;
+    const query = "SELECT * FROM MATERIA WHERE idMateria IN (SELECT idMateria FROM USUARIOMATERIA where idUsuario = $1)";
+    const values = [idusuario];
 
+    db.query(query, values, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.status(400).send("Bad Request");
+            return;
+        }
+
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found');
+            return;
+        }
+
+        res.status(200).send(data.rows);
+    })
+})
 
 module.exports = router;

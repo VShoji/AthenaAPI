@@ -3,7 +3,6 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const db = require('../bd.js');
 const router = require('express').Router();
-const requireAuth = require('../middleware/requireAuth');
 
 // Cadastro
 
@@ -12,41 +11,59 @@ router.post('/atualizarinfo/:idusuario', (req, res) => {
     const idUsuario    = req.params.idusuario;
     const nomeUsuario  = req.body.nomeUsuario;
     const emailUsuario = req.body.emailUsuario;
-    const senhaUsuario = req.body.senhaUsuario;
+    const senhaAtual = req.body.senhaAtual;
+    const novaSenha = req.body.novaSenha;
+ 
 
-    bcrypt.hash(senhausuario, 10, (err, hash) => {
+    const query = "SELECT * FROM USUARIO where idusuario = $1 ";
+    values = [idUsuario];
+
+    db.query(query, values, (err, data) => {
         if (err) {
             console.log("> " + err)
-            res.status(500).send('Internal Server Error');
+            res.status(500).json({message: "Internal Server Error;", status: 500});
             return;
         }
 
-        const query = "UPDATE USUARIO SET nomeusuario = '$2', emailusuario = '$3', senhausuario = '$4' where idusuario = $1 ";
-        const values = [idUsuario, nomeUsuario, emailUsuario, senhaUsuario];
-    
-        /*bcrypt.compare(req.body.senhaUsuario, data.rows[0].senhausuario, (err, same) => {
+            bcrypt.compare(senhaAtual, data.rows[0].senhausuario, (err, same) => {
+                if (err) {
+                    console.log("> " + err)
+                    res.status(500).json({message: "Internal Server Error;", status: 500});
+                    return;
+                }
+
+                if (!same) {
+                    res.status(403).json({message: "Access denied", status: 403});
+                    return;
+                }
+
+        });
+    })
+
+        bcrypt.hash(novaSenha, 10, (err, hash) => {
             if (err) {
                 console.log("> " + err)
-                res.status(500).send('Internal Server Error');
+                res.status(500).json({message: "Internal Server Error", status: 500});
                 return;
             }
+            
+        
 
-            if (!same) {
-                res.status(403).send("Access denied");
-                return;
-            }*/
+        const query2 = "UPDATE USUARIO SET nomeusuario = '$2', emailusuario = '$3', senhausuario = '$4' where idusuario = $1 ";
+        const values = [idUsuario, nomeUsuario, emailUsuario, hash];
 
-
-        db.query(query, values, (err, data) => {
+        db.query(query2, values, (err) => {
             if (err) {
                 console.log("> " + err)
-                res.status(500).send('Internal Server Error');
+                res.status(500).json({message: "Internal Server Error;", status: 500});
                 return;
             }
         
         })
+
+        res.status.json({message: "Sucess", status: 201})
+        });
     });
-})
 
 
 module.exports = router;

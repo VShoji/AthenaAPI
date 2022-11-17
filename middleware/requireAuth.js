@@ -20,8 +20,9 @@ module.exports = (req, res, next) => {
         
             res.locals.cookie = cookie;
             next();
-            return;
         });
+        
+        return;
     }
 
     res.status(400).send('Bad Request');

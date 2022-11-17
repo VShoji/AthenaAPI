@@ -12,7 +12,8 @@ app.use(require('body-parser').json())
 app.use('/tarefa', require('./routes/tarefa.js'))
 app.use('/material', require('./routes/material.js'))
 app.use('/materia', require('./routes/materia.js'));
-app.use('/user', require('./routes/authUser.js'));
+app.use('/authuser', require('./routes/authUser.js'));
+app.use('/user', require('./routes/user.js'));
 app.use('/desempenho', require('./routes/desempenho.js'));
 app.use('/exercicio', require('./routes/exercicio.js'));
 app.use('/usuariomateria', require('./routes/usuarioMateria.js'));

@@ -66,6 +66,29 @@ router.get('/getUm/:iddesempenho', (req, res) => {
     });
 });
 
+router.get('/getAllUser/:idusuario', (req, res) => {
+
+    const idusuario = req.params.idusuario;
+
+    const query = 'SELECT * FROM DESEMPENHO WHERE idusuario=$1';
+    const values = [idusuario];
+
+    db.query(query, values, (err, data) => {
+
+        if (err) {
+            res.status(400).send('Bad Request');
+            return;
+        }
+
+        if (data.rows.length == 0) {
+            res.status(404).send('Not Found')
+            return;
+        }
+        
+        res.status(200).send(data.rows);
+    });
+});
+
 router.post('/post', (req, res) => {
 
     let ts = Date.now();
@@ -83,6 +106,7 @@ router.post('/post', (req, res) => {
         desempenho = Desempenho.novo(req.body.iddesempenho, req.body.nota, req.body.idusuario, req.body.idmateria, dateNow);
     }
     catch (excecao) {
+        console.log(excecao);
         return res.status(422).send("Unprocessable Entity");
     }
 

@@ -68,8 +68,7 @@ router.post('/post', (req, res) => {
 
     const descricaotarefa = req.body.descricaotarefa;
     const idusuario = req.body.idusuario;
-
-
+    
 
     const query = 'INSERT INTO TAREFA(idtarefa ,descricaotarefa, idusuario) VALUES (DEFAULT, $1, $2)';
     const values = [descricaotarefa, idusuario];

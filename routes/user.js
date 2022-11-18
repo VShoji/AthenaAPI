@@ -28,41 +28,50 @@ router.post('/atualizarinfo/:idusuario', (req, res) => {
             bcrypt.compare(senhaAtual, data.rows[0].senhausuario, (err, same) => {
                 if (err) {
                     console.log("> " + err)
-                    res.status(500).json({message: "Internal Server Error;", status: 500});
+                    res.status(500).json({message: "Internal Server Error.", status: 500});
                     return;
                 }
 
                 if (!same) {
+                    console.log("erro");
                     res.status(403).json({message: "Access denied", status: 403});
                     return;
+                }
+                else{
+
+                    bcrypt.hash(novaSenha, 10, (err, hash) => {
+                        if (err) {
+                            console.log("> " + err)
+                            res.status(500).json({message: "Internal Server Error", status: 500});
+                            return;
+                        }
+                        
+                    
+            
+                    const query = "UPDATE USUARIO SET nomeusuario = $2, emailusuario = $3, senhausuario = $4 where idusuario = $1 ";
+                    const values = [idUsuario, nomeUsuario, emailUsuario, hash];
+
+            
+                    
+            
+                    db.query(query, values, (err) => {
+                        if (err) {
+                            console.log("> " + err)
+                            res.status(500).json({message: "Internal Server Error;", status: 500});
+                            return;
+                        }
+                        res.status(201).json({message: "Sucess", status: 201})
+                    
+                    })
+            
+                    });
+
                 }
 
         });
     })
 
-        bcrypt.hash(novaSenha, 10, (err, hash) => {
-            if (err) {
-                console.log("> " + err)
-                res.status(500).json({message: "Internal Server Error", status: 500});
-                return;
-            }
-            
         
-
-        const query2 = "UPDATE USUARIO SET nomeusuario = '$2', emailusuario = '$3', senhausuario = '$4' where idusuario = $1 ";
-        const values = [idUsuario, nomeUsuario, emailUsuario, hash];
-
-        db.query(query2, values, (err) => {
-            if (err) {
-                console.log("> " + err)
-                res.status(500).json({message: "Internal Server Error;", status: 500});
-                return;
-            }
-        
-        })
-
-        res.status.json({message: "Sucess", status: 201})
-        });
     });
 
 

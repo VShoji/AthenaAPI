@@ -67,18 +67,19 @@ router.get('/getUm/:idtarefa', (req, res) => {
 router.post('/post', (req, res) => {
 
     const descricaotarefa = req.body.descricaotarefa;
-    const idusuario = req.body.idusuario;
+    const idusuario = req.body.idusuariotarefa;
+    const date = req.body.date; 
     
 
-    const query = 'INSERT INTO TAREFA(idtarefa ,descricaotarefa, idusuario) VALUES (DEFAULT, $1, $2)';
-    const values = [descricaotarefa, idusuario];
+    const query = 'INSERT INTO TAREFA(idtarefa ,descricaotarefa, idusuario, date) VALUES (DEFAULT, $1, $2, $3)';
+    const values = [descricaotarefa, idusuario, date];
 
     db.query(query, values, (err, data) => {
         if (err) {
             res.status(400).send('Bad Request');
             return;
         }
-        res.status(200).send("Tarefa cadastrada com sucesso.");
+        res.status(200).json({message:"Tarefa cadastrada com sucesso.", status: 200});
     });
 });
 
